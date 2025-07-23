@@ -142,17 +142,6 @@ export default defineConfig([
                     destructureInSignature: 'always',
                 },
             ],
-            'react/forbid-elements': [
-                'error',
-                {
-                    forbid: [
-                        {
-                            element: 'button',
-                            message: 'use <Button> instead',
-                        },
-                    ],
-                },
-            ],
             'react/jsx-boolean-value': 'warn',
             'react/jsx-curly-brace-presence': [
                 'warn',
