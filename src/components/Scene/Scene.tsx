@@ -41,7 +41,7 @@ export const Scene: React.FC = () => {
         }
     }, []);
 
-    useFrame((_, dt) => {
+    useFrame(() => {
         const particles = particlesRef.current;
 
         for (const a of particles) {
@@ -53,7 +53,7 @@ export const Scene: React.FC = () => {
         }
 
         for (const particle of particles) {
-            particle.update(dt);
+            particle.update(0.03);
         }
     });
 
