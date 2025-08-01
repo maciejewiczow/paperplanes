@@ -8,8 +8,8 @@ import { randomNormal } from '~/math/normalDistribution';
 import { Particle } from '~/math/Particle';
 import { PaperPlaneInstance } from '../PaperPlaneInstance';
 
-const nPlanes = 500;
-const initialSpeed = 30;
+const nPlanes = 300;
+const initialSpeed = 29;
 
 export const Scene: React.FC = () => {
     const particlesRef = useRef<Particle[]>([]);
@@ -34,14 +34,14 @@ export const Scene: React.FC = () => {
                         .cross(new Vector3(0, 1, 0))
                         .setLength(initialSpeed);
 
-                    return new Particle(pos, vel, 1);
+                    return new Particle(pos, vel, 0.8);
                 }),
                 new Particle(new Vector3(), new Vector3(), 1000, true),
             ];
         }
     }, []);
 
-    useFrame(() => {
+    useFrame((_, dt) => {
         const particles = particlesRef.current;
 
         for (const a of particles) {
@@ -53,7 +53,7 @@ export const Scene: React.FC = () => {
         }
 
         for (const particle of particles) {
-            particle.update(0.03);
+            particle.update(Math.min(dt * 1.2, 0.03));
         }
     });
 
