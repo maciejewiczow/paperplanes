@@ -32,6 +32,10 @@ export class Particle {
     }
 
     update(dt: number) {
+        if (this.stationary) {
+            return;
+        }
+
         const res = integrateRK4(
             0,
             dt,
@@ -73,17 +77,5 @@ export class Particle {
         ] = squeeze(row(res, 1).toArray()) as number[];
 
         this.acceleration.set(0, 0, 0);
-    }
-
-    get x(): number {
-        return this.position.x;
-    }
-
-    get y(): number {
-        return this.position.x;
-    }
-
-    get z(): number {
-        return this.position.z;
     }
 }

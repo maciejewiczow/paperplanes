@@ -13,6 +13,7 @@ const initialSpeed = 29;
 
 export const Scene: React.FC = () => {
     const particlesRef = useRef<Particle[]>([]);
+    const planetParicle = useRef<Particle | null>(null);
     const {
         nodes: { Plane: planeNode },
         materials: { PlaneMaterial: planeMaterial },
@@ -20,36 +21,38 @@ export const Scene: React.FC = () => {
 
     React.useEffect(() => {
         if (particlesRef.current.length === 0) {
-            particlesRef.current = [
-                ...Array.from({ length: nPlanes }).map(() => {
-                    let pos = new Vector3(1, 0, 0)
-                        .multiplyScalar(randomNormal(10, 8))
-                        .applyEuler(new Euler(0, random(0, Math.PI * 2), 0))
-                        .setY(randomNormal(0, 0.3));
+            particlesRef.current = Array.from({ length: nPlanes }).map(() => {
+                let pos = new Vector3(1, 0, 0)
+                    .multiplyScalar(randomNormal(10, 8))
+                    .applyEuler(new Euler(0, random(0, Math.PI * 2), 0))
+                    .setY(randomNormal(0, 0.6));
 
-                    pos = pos.setLength(pos.length() + 20);
+                pos = pos.setLength(pos.length() + 20);
 
-                    const vel = pos
-                        .clone()
-                        .cross(new Vector3(0, 1, 0))
-                        .setLength(initialSpeed);
+                const vel = pos
+                    .clone()
+                    .cross(new Vector3(0, 1, 0))
+                    .setLength(initialSpeed);
 
-                    return new Particle(pos, vel, 0.8);
-                }),
-                new Particle(new Vector3(), new Vector3(), 1000, true),
-            ];
+                return new Particle(pos, vel, 0.8);
+            });
+        }
+
+        if (planetParicle.current === null) {
+            planetParicle.current = new Particle(
+                new Vector3(),
+                new Vector3(),
+                1000,
+                true,
+            );
         }
     }, []);
 
     useFrame((_, dt) => {
         const particles = particlesRef.current;
 
-        for (const a of particles) {
-            for (const b of particles) {
-                if (a !== b) {
-                    a.attract(b);
-                }
-            }
+        for (const p of particles) {
+            planetParicle.current?.attract(p);
         }
 
         for (const particle of particles) {
